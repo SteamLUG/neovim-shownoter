@@ -1,0 +1,5 @@
+Neovim plugin for editing SteamLUG Cast shownotes
+
+Requires Python 3 and python-vlc.
+
+Very early in development. Expect lots of missing implementations and horribly wrong code.
