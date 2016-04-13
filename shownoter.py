@@ -94,7 +94,7 @@ class Shownoter(object):
 		self.p.audio_set_volume(c)
 		self.nvim.command('echom "Playback volume set to {}"'.format(c))
 	
-	@neovim.function('ShownotesToTimestamp', nargs='1')
+	@neovim.function('ShownotesToTimestamp')
 	def to_timestamp(self, msecs):
 		hours, msecs = divmod(msecs, 3600000)
 		minutes, msecs = divmod(msecs, 60000)
@@ -104,7 +104,7 @@ class Shownoter(object):
 			hms[i] = str(hms[i]).rjust(2, '0')
 		return(':'.join(hms))
 	
-	@neovim.function('ShownotesToMsec', nargs='1')
+	@neovim.function('ShownotesToMsec')
 	def to_msec(self, timestamp):
 		hms = timestamp.split(':')
 		msecs = int(hms[0]) * 3600000
