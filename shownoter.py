@@ -23,7 +23,7 @@ class Shownoter(object):
 		buf = self.nvim.current.buffer.number
 		self.buf_mem[buf] = self.p
 	
-	@neovim.function('SetAudio')
+	@neovim.command('ShownoterSetAudio', nargs='?')
 	def set_audio(self, filename):
 		if filename is None:
 			buf_path = os.path.split(os.path.abspath(self.nvim.current.buffer.name))
@@ -44,7 +44,7 @@ class Shownoter(object):
 		else:
 			self.nvim.command('echom "Audio file not found"')
 	
-	@neovim.function('TogglePlay')
+	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
 		if self.p.is_playing():
 			self.nvim.command('echom "Pausing"')
@@ -53,30 +53,30 @@ class Shownoter(object):
 			self.nvim.command('echom "Playing"')
 			self.p.play()
 	
-	@neovim.function('InsertTimestamp')
+	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
 		self.p.get_time()
 		pass
 	
-	@neovim.function('SeekTimestamp')
-	def seek_timestamp(self, args):
+	@neovim.command('ShownoterSeekTimestamp', nargs='?')
+	def seek_timestamp(self, timestamp):
 		self.p.set_time()
 		pass
 	
-	@neovim.function('Skip')
-	def skip(self):
 		self.p.get_time()
 		self.p.set_time()
 		pass
+	@neovim.command('ShownoterSkipTime', nargs='1')
+	def skip(self, msecs):
 	
-	@neovim.function('Speed')
-	def speed(self, args):
+	@neovim.command('ShownoterChangeSpeed', nargs='?')
+	def speed(self, c=0):
 		self.p.get_rate()
 		self.p.set_rate()
 		pass
 	
-	@neovim.function('Volume')
-	def volume(self, args):
+	@neovim.command('ShownoterChangeVolume', nargs='?')
+	def volume(self, c=0):
 		self.p.audio_get_volume()
 		self.p.audio_set_volume()
 		pass
