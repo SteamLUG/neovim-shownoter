@@ -63,21 +63,25 @@ class Shownoter(object):
 		self.p.set_time()
 		pass
 	
-		self.p.get_time()
-		self.p.set_time()
-		pass
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
+		self.p.set_time(msecs + self.p.get_time())
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
-		self.p.get_rate()
-		self.p.set_rate()
-		pass
+		if c is 0:
+			c = 1
+		else:
+			c = c + self.p.get_rate()
+		self.p.set_rate(c)
+		self.nvim.command('echom "Playback rate set to {}"'.format(c))
 	
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
-		self.p.audio_get_volume()
-		self.p.audio_set_volume()
-		pass
+		if c is 0:
+			c = 1
+		else:
+			c = c + self.p.audio_get_volume()
+		self.p.audio_set_volume(c)
+		self.nvim.command('echom "Playback volume set to {}"'.format(c))
 
