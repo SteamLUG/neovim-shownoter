@@ -17,6 +17,7 @@ class Shownoter(object):
 			if self.p is not buf_mem[buf]:
 				self.pause_all()
 				self.p = buf_mem[buf]
+				self.nvim.command('echom "Shownoter: Audio file swapped"')
 			else:
 				pass  # Already loaded
 		else:
@@ -39,23 +40,23 @@ class Shownoter(object):
 		
 		if os.path.exists(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
-			self.nvim.command('echom "Loaded {}"'.format(filename))
+			self.nvim.command('echom "Shownoter: Loaded {}"'.format(filename))
 			
 			#if self.p.will_play():  # Does not appear to act as expected...
-			#	self.nvim.command('echom "Loaded {}"'.format(filename))
+			#	self.nvim.command('echom "Shownoter: Loaded {}"'.format(filename))
 			#else:
-			#	self.nvim.command('echom "{} not a valid format"'.format(filename))
+			#	self.nvim.command('echom "Shownoter: {} not a valid format"'.format(filename))
 		else:
-			self.nvim.command('echom "Audio file not found"')
+			self.nvim.command('echom "Shownoter: Audio file not found"')
 	
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
 		if self.p.is_playing():
 			self.p.pause()
-			self.nvim.command('echom "Audio paused"')
+			self.nvim.command('echom "Shownoter: Audio paused"')
 		else:
 			self.p.play()
-			self.nvim.command('echom "Audio resumed"')
+			self.nvim.command('echom "Shownoter: Audio resumed"')
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
@@ -70,11 +71,13 @@ class Shownoter(object):
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
 		self.p.set_time(self.to_msec(timestamp))
+		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(to_timestamp()))
 		pass
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
 		self.p.set_time(msecs + self.p.get_time())
+		self.nvim.command('echom "Shownoter: Skipped to {}"'.format(to_timestamp()))
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
@@ -83,7 +86,7 @@ class Shownoter(object):
 		else:
 			c = c + self.p.get_rate()
 		self.p.set_rate(c)
-		self.nvim.command('echom "Playback rate set to {}"'.format(c))
+		self.nvim.command('echom "Shownoter: Playback rate set to {}"'.format(c))
 	
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
@@ -92,7 +95,7 @@ class Shownoter(object):
 		else:
 			c = c + self.p.audio_get_volume()
 		self.p.audio_set_volume(c)
-		self.nvim.command('echom "Playback volume set to {}"'.format(c))
+		self.nvim.command('echom "Shownoter: Playback volume set to {}"'.format(c))
 	
 	@neovim.function('ShownotesToTimestamp')
 	def to_timestamp(self, msecs=None):
