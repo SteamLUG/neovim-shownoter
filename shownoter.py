@@ -64,12 +64,12 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
-		self.p.get_time()
+		timestamp = self.to_timestamp(self.p.get_time())
 		pass
 	
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
-	def seek_timestamp(self, timestamp):
-		self.p.set_time()
+	def seek_timestamp(self, timestamp='00:00:00'):
+		self.p.set_time(self.to_msec(timestamp))
 		pass
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
@@ -93,4 +93,12 @@ class Shownoter(object):
 			c = c + self.p.audio_get_volume()
 		self.p.audio_set_volume(c)
 		self.nvim.command('echom "Playback volume set to {}"'.format(c))
+	
+	@neovim.function('ShownotesToTimestamp', nargs='1')
+	def to_timestamp(self, msecs):
+		pass
+	
+	@neovim.function('ShownotesToMsec', nargs='1')
+	def to_msec(self, timestamp):
+		pass
 
