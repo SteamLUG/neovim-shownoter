@@ -47,11 +47,11 @@ class Shownoter(object):
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
 		if self.p.is_playing():
-			self.nvim.command('echom "Pausing"')
 			self.p.pause()
+			self.nvim.command('echom "Audio paused"')
 		else:
-			self.nvim.command('echom "Playing"')
 			self.p.play()
+			self.nvim.command('echom "Audio resumed"')
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
