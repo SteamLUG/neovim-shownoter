@@ -96,9 +96,19 @@ class Shownoter(object):
 	
 	@neovim.function('ShownotesToTimestamp', nargs='1')
 	def to_timestamp(self, msecs):
-		pass
+		hours, msecs = divmod(msecs, 3600000)
+		minutes, msecs = divmod(msecs, 60000)
+		seconds, msecs = divmod(msecs, 1000)
+		hms = [hours, minutes, seconds]
+		for i in range(3):
+			hms[i] = str(hms[i]).rjust(2, '0')
+		return(':'.join(hms))
 	
 	@neovim.function('ShownotesToMsec', nargs='1')
 	def to_msec(self, timestamp):
-		pass
+		hms = timestamp.split(':')
+		msecs = int(hms[0]) * 3600000
+		msecs = int(hms[1]) * 60000 + msecs
+		msecs = int(hms[2]) * 1000 + msecs
+		return(msec)
 
