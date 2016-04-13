@@ -14,7 +14,11 @@ class Shownoter(object):
 	def load_info(self):
 		buf = self.nvim.current.buffer.number
 		if buf in self.buf_mem:
-			self.p = buf_mem[buf]
+			if self.p is not buf_mem[buf]:
+				self.pause_all()
+				self.p = buf_mem[buf]
+			else:
+				pass  # Already loaded
 		else:
 			self.set_audio()
 	
@@ -52,6 +56,11 @@ class Shownoter(object):
 		else:
 			self.p.play()
 			self.nvim.command('echom "Audio resumed"')
+	
+	@neovim.command('ShownoterPauseAll')
+	def pause_all(self):
+		for m in self.p:
+			m.pause()
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
