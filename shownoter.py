@@ -28,7 +28,7 @@ class Shownoter(object):
 		buf = self.nvim.current.buffer.number
 		self.buf_mem[buf] = self.p
 	
-	@neovim.command('ShownoterSetAudio', nargs='?')
+	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename):
 		if filename is None:
 			buf_path = os.path.split(os.path.abspath(self.nvim.current.buffer.name))
@@ -111,7 +111,7 @@ class Shownoter(object):
 		seconds, msecs = divmod(msecs, 1000)
 		hms = [hours, minutes, seconds]
 		for i in range(3):
-			hms[i] = str(hms[i]).rjust(2, '0')
+			hms[i] = str(hms[i]).zfill(2)
 		return(':'.join(hms))
 	
 	@neovim.function('ShownotesToMsec')
