@@ -68,11 +68,15 @@ class Shownoter(object):
 		timestamp = self.to_timestamp()
 		pass
 	
+	@neovim.command('ShownoterSeekFromCurrentLine')
+	def seek_from_line(self):
+		timestamp = self.nvim.current.line.split(maxsplit=1)[0]
+		self.seek_timestamp(timestamp)
+	
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
 		self.p.set_time(self.to_msec(timestamp))
 		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(to_timestamp()))
-		pass
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
