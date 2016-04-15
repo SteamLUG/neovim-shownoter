@@ -66,7 +66,7 @@ class Shownoter(object):
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
 		timestamp = self.to_timestamp()
-		self.nvim.command('normal! 0i{} '.format(timestamp))
+		self.nvim.current.line = timestamp + self.nvim.current.line
 	
 	@neovim.command('ShownoterSeekFromCurrentLine')
 	def seek_from_line(self):
