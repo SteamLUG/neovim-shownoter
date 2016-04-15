@@ -60,8 +60,8 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
-		for m in self.p:
-			m.pause()
+		for player in self.buf_mem:
+			player.pause()
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
