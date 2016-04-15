@@ -82,15 +82,19 @@ class Shownoter(object):
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
 		self.p.set_time(self.to_msec(timestamp))
-		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(to_timestamp()))
+		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(self.to_timestamp()))
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
+		if not isinstance(msecs, int):
+			msecs = int(str(msecs).strip("[']"))
 		self.p.set_time(msecs + self.p.get_time())
-		self.nvim.command('echom "Shownoter: Skipped to {}"'.format(to_timestamp()))
+		self.nvim.command('echom "Shownoter: Skipped to {}"'.format(self.to_timestamp()))
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
+		if not isinstance(c, float):
+			c = float(str(c).strip("[']"))
 		if c is 0:
 			c = 1
 		else:
@@ -100,6 +104,8 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
+		if not isinstance(c, int):
+			c = int(str(c).strip("[']"))
 		if c is 0:
 			c = 1
 		else:
@@ -111,7 +117,9 @@ class Shownoter(object):
 	def to_timestamp(self, msecs=None):
 		if msecs is None:
 			msecs = self.p.get_time()
-		
+		elif not isinstance(msecs, int):
+			msecs = int(str(msecs).strip("[']"))
+
 		hours, msecs = divmod(msecs, 3600000)
 		minutes, msecs = divmod(msecs, 60000)
 		seconds, msecs = divmod(msecs, 1000)
@@ -122,9 +130,11 @@ class Shownoter(object):
 	
 	@neovim.function('ShownotesToMsec')
 	def to_msec(self, timestamp):
+		if not isinstance(timestamp, str):
+			timestamp = str(timestamp).strip("[']")
 		hms = timestamp.split(':')
 		msecs = int(hms[0]) * 3600000
 		msecs = int(hms[1]) * 60000 + msecs
 		msecs = int(hms[2]) * 1000 + msecs
-		return(msec)
+		return(msecs)
 
