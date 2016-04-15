@@ -29,15 +29,19 @@ class Shownoter(object):
 		self.buf_mem[buf] = self.p
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
-	def set_audio(self, filename):
+	def set_audio(self, filename=None):
 		if filename is None:
 			buf_path = os.path.split(os.path.abspath(self.nvim.current.buffer.name))
-			for file in os.listdir(buf_path[0]):
-				if fnmatch.fnmatch(file, '*.ogg'):
-					filename = buf_path[0] + file
-		else:
-			filename = os.path.abspath(filename)
+			for a_file in os.listdir(buf_path[0]):
+				if fnmatch.fnmatch(a_file, '*.ogg'):
+					filename = buf_path[0] + '/' + a_file
+			if filename is None:
+				self.nvim.command('echom "Shownoter: No audio found"')
+				return
+		elif not isinstance(filename, str):
+			filename = str(filename).strip("[']")
 		
+		filename = os.path.abspath(filename)
 		if os.path.exists(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
 			self.nvim.command('echom "Shownoter: Loaded {}"'.format(filename))
@@ -47,7 +51,7 @@ class Shownoter(object):
 			#else:
 			#	self.nvim.command('echom "Shownoter: {} not a valid format"'.format(filename))
 		else:
-			self.nvim.command('echom "Shownoter: Audio file not found"')
+			self.nvim.command('echom "Shownoter: Audio file not found {}"'.format(filename))
 	
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
