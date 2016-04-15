@@ -64,12 +64,14 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
+		self.p.pause()
 		for player in self.buf_mem:
-			player.pause()
+			if isinstance(player, vlc.MediaPlayer):
+				player.pause()
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
-		timestamp = self.to_timestamp()
+		timestamp = self.to_timestamp() + " "
 		self.nvim.current.line = timestamp + self.nvim.current.line
 	
 	@neovim.command('ShownoterSeekFromCurrentLine')
