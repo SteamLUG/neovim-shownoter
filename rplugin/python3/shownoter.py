@@ -10,13 +10,13 @@ class Shownoter(object):
 		self.p = vlc.MediaPlayer('')
 		self.buf_mem = {}
 	
-	@neovim.autocmd('BufEnter', pattern='episode.txt', eval='set spell', sync=True)
+	@neovim.autocmd('BufEnter', pattern='episode.txt', sync=True) #, eval=':normal setlocal spell'
 	def load_info(self):
 		buf = self.nvim.current.buffer.number
 		if buf in self.buf_mem:
-			if self.p is not buf_mem[buf]:
+			if self.p is not self.buf_mem[buf]:
 				self.pause_all()
-				self.p = buf_mem[buf]
+				self.p = self.buf_mem[buf]
 				self.nvim.command('echom "Shownoter: Audio file swapped"')
 			else:
 				pass  # Already loaded
