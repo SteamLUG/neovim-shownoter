@@ -55,12 +55,17 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
-		if self.p.is_playing():
+		state = self.p.get_state().value
+		if state is vlc.State.Playing.value:
 			self.p.pause()
 			self.nvim.command('echom "Shownoter: Audio paused"')
-		else:
+		if state is vlc.State.Paused.value:
 			self.p.play()
 			self.nvim.command('echom "Shownoter: Audio resumed"')
+		elif state is vlc.State.Stopped.value:
+			self.p.stop()
+			self.p.play()
+			self.nvim.command('echom "Shownoter: Audio restarted"')
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
@@ -119,7 +124,7 @@ class Shownoter(object):
 			msecs = self.p.get_time()
 		elif not isinstance(msecs, int):
 			msecs = int(str(msecs).strip("[']"))
-
+		
 		hours, msecs = divmod(msecs, 3600000)
 		minutes, msecs = divmod(msecs, 60000)
 		seconds, msecs = divmod(msecs, 1000)
