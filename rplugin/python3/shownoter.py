@@ -92,14 +92,14 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
-		self.p.set_time(self.to_msec(timestamp))
+		self.p.set_position(self.to_msec(timestamp)/self.p.get_length())
 		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(self.to_timestamp()))
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
 		if not isinstance(msecs, int):
 			msecs = int(str(msecs).strip("[']"))
-		self.p.set_time(msecs + self.p.get_time())
+		self.p.set_position((msecs + self.p.get_time())/self.p.get_length())
 		self.nvim.command('echom "Shownoter: Skipped to {}"'.format(self.to_timestamp()))
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
