@@ -126,10 +126,13 @@ class Shownoter(object):
 	
 	@neovim.function('ShownotesToTimestamp')
 	def to_timestamp(self, msecs=None):
+		if not isinstance(msecs, int):
+			try:
+				msecs = int(str(msecs).strip("[']"))
+			except:
+				msecs = None
 		if msecs is None:
 			msecs = self.p.get_time()
-		elif not isinstance(msecs, int):
-			msecs = int(str(msecs).strip("[']"))
 		
 		hours, msecs = divmod(msecs, 3600000)
 		minutes, msecs = divmod(msecs, 60000)
