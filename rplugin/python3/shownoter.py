@@ -18,7 +18,7 @@ class Shownoter(object):
 			if self.p is not self.buf_mem[buf]:
 				self.pause_all()
 				self.p = self.buf_mem[buf]
-				self.nvim.command('echom "Shownoter: Audio file swapped"')
+				self.show_echo('Audio file swapped')
 			else:
 				pass  # Already loaded
 		else:
@@ -37,7 +37,7 @@ class Shownoter(object):
 				if fnmatch.fnmatch(a_file, '*.ogg'):
 					filename = buf_path[0] + '/' + a_file
 			if filename is None:
-				self.nvim.command('echom "Shownoter: No audio found"')
+				self.show_echo('No audio found', warning=True)
 				return
 		elif not isinstance(filename, str):
 			filename = str(filename).strip("[']")
@@ -45,14 +45,14 @@ class Shownoter(object):
 		filename = os.path.abspath(filename)
 		if os.path.exists(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
-			self.nvim.command('echom "Shownoter: Loaded {}"'.format(filename))
+			self.show_echo('Audio loaded: {}'.format(filename))
 			
 			#if self.p.will_play():  # Does not appear to act as expected...
-			#	self.nvim.command('echom "Shownoter: Loaded {}"'.format(filename))
+			#	self.show_echo('Audio loaded: {}'.format(filename))
 			#else:
-			#	self.nvim.command('echom "Shownoter: {} not a valid format"'.format(filename))
+			#	self.show_echo('Invalid audio format: {}'.format(filename), True)
 		else:
-			self.nvim.command('echom "Shownoter: Audio file not found {}"'.format(filename))
+			self.show_echo('Audio file not found: {}'.format(filename), error=True)
 	
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
@@ -63,14 +63,14 @@ class Shownoter(object):
 		if -1 < time < length:
 			if state is vlc.State.Playing.value:
 				self.p.pause()
-				self.nvim.command('echom "Shownoter: Audio playback paused"')
+				self.show_echo('Audio playback paused', message = False)
 			elif state is vlc.State.Paused.value:
 				self.p.play()
-				self.nvim.command('echom "Shownoter: Audio playback resumed"')
+				self.show_echo('Audio playback resumed', message = False)
 		else:
 			self.p.stop()
 			self.p.play()
-			self.nvim.command('echom "Shownoter: Audio playback (re)started"')
+			self.show_echo('Audio playback (re)started', message = False)
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
@@ -91,19 +91,19 @@ class Shownoter(object):
 		if timestamp:
 			self.seek_timestamp(timestamp.group(0))
 		else:
-			self.nvim.command('echom "Shownoter: No timestamp on this line"')
+			self.show_echo('No timestamp on this line', error=True)
 	
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
 		self.p.set_position(self.to_msec(timestamp)/self.p.get_length())
-		self.nvim.command('echom "Shownoter: Seeked to {}"'.format(self.to_timestamp()))
+		self.show_echo('Seeked to {}'.format(self.to_timestamp()))
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
 		if not isinstance(msecs, int):
 			msecs = int(str(msecs).strip("[']"))
 		self.p.set_position((msecs + self.p.get_time())/self.p.get_length())
-		self.nvim.command('echom "Shownoter: Skipped to {}"'.format(self.to_timestamp()))
+		self.show_echo('Skipped to {}'.format(self.to_timestamp()), message = False)
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
@@ -114,7 +114,7 @@ class Shownoter(object):
 		else:
 			c = c + self.p.get_rate()
 		self.p.set_rate(c)
-		self.nvim.command('echom "Shownoter: Playback rate set to {}"'.format(c))
+		self.show_echo('Playback rate set to {}'.format(c), message = False)
 	
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
@@ -125,7 +125,7 @@ class Shownoter(object):
 		else:
 			c = c + self.p.audio_get_volume()
 		self.p.audio_set_volume(c)
-		self.nvim.command('echom "Shownoter: Playback volume set to {}"'.format(c))
+		self.show_echo('Playback volume set to {}'.format(c), message = False)
 	
 	@neovim.function('ShownotesToTimestamp')
 	def to_timestamp(self, msecs=None):
@@ -154,4 +154,15 @@ class Shownoter(object):
 		msecs = int(hms[1]) * 60000 + msecs
 		msecs = int(hms[2]) * 1000 + msecs
 		return(msecs)
+	
+	def show_echo(self, text, message=True, warning=False, error=False):
+		if message:
+			command = 'echomsg "Shownoter: {}"'.format(text)
+		else:
+			command = 'echo "Shownoter: {}"'.format(text)
+		if warning:
+			command = 'echohl WarningMsg | {} | echohl None'.format(command)
+		elif error:
+			command = 'echohl ErrorMsg | {} | echohl None'.format(command)
+		self.nvim.command(command)
 
