@@ -2,7 +2,7 @@ import neovim
 import vlc
 import fnmatch
 import os
-from re import sub
+import re
 
 @neovim.plugin
 class Shownoter(object):
@@ -82,13 +82,16 @@ class Shownoter(object):
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
 		timestamp = self.to_timestamp() + " "
-		line = sub('^(\d{2}:?){3} ', '', self.nvim.current.line, 1)
+		line = re.sub('^(\d{2}:?){3} ', '', self.nvim.current.line, 1)
 		self.nvim.current.line = timestamp + line
 	
 	@neovim.command('ShownoterSeekFromCurrentLine')
 	def seek_from_line(self):
-		timestamp = self.nvim.current.line.split(maxsplit=1)[0]
-		self.seek_timestamp(timestamp)
+		timestamp = re.match('^(\d{2}:?){3}', self.nvim.current.line)
+		if timestamp:
+			self.seek_timestamp(timestamp.group(0))
+		else:
+			self.nvim.command('echom "Shownoter: No timestamp on this line"')
 	
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
