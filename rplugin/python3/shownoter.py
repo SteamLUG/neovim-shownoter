@@ -11,7 +11,7 @@ class Shownoter(object):
 		self.p = vlc.MediaPlayer('')
 		self.buf_mem = {}
 	
-	@neovim.autocmd('BufEnter', pattern='episode.txt', sync=True) #, eval=':normal setlocal spell'
+	@neovim.autocmd('BufEnter', pattern='episode.txt', sync=True)
 	def load_info(self):
 		buf = self.nvim.current.buffer.number
 		if buf in self.buf_mem:
@@ -46,11 +46,6 @@ class Shownoter(object):
 		if os.path.exists(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
 			self.show_echo('Audio loaded: {}'.format(filename))
-			
-			#if self.p.will_play():  # Does not appear to act as expected...
-			#	self.show_echo('Audio loaded: {}'.format(filename))
-			#else:
-			#	self.show_echo('Invalid audio format: {}'.format(filename), True)
 		else:
 			self.show_echo('Audio file not found: {}'.format(filename), error=True)
 	
