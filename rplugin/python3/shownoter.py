@@ -23,11 +23,21 @@ class Shownoter(object):
 				pass  # Already loaded
 		else:
 			self.set_audio()
+		self.assign_keys()
 	
 	@neovim.autocmd('BufLeave', pattern='episode.txt', sync=True)
 	def save_buf(self):
 		buf = self.nvim.current.buffer.number
 		self.buf_mem[buf] = self.p
+		
+		unmap_list = []
+		if not self.nvim.vars.get('shownoter_no_mappings'):
+			unmap_list.append('unmap <buffer> <M-p>')
+			unmap_list.append('unmap <buffer> <M-CR>')
+			if not self.nvim.vars.get('shownoter_no_insert_mappings'):
+				unmap_list.append('unmap! <buffer> <M-p>')
+				unmap_list.append('unmap! <buffer> <M-CR>')
+		self.assign_keys(unmap_list)
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
@@ -160,4 +170,38 @@ class Shownoter(object):
 		elif error:
 			command = 'echohl ErrorMsg | {} | echohl None'.format(command)
 		self.nvim.command(command)
+	
+	def assign_keys(self, map_list = []):
+		if len(map_list) is not 0:
+			for mapping in map_list:
+				self.nvim.command(mapping)
+
+		elif not self.nvim.vars.get('shownoter_no_mappings'):
+			map_list.append('noremap <M-Space> :ShownoterTogglePlay<CR>')
+			map_list.append('noremap <buffer> <M-p> :ShownoterInsertTimestamp<CR>')
+			map_list.append('noremap <buffer> <M-CR> :ShownoterSeekFromCurrentLine<CR>')
+			map_list.append('noremap <M-h> :ShownoterSkipTime -5000<CR>')
+			map_list.append('noremap <M-H> :ShownoterSkipTime -10000<CR>')
+			map_list.append('noremap <M-l> :ShownoterSkipTime 5000<CR>')
+			map_list.append('noremap <M-L> :ShownoterSkipTime 10000<CR>')
+			map_list.append('noremap <M-j> :ShownoterChangeSpeed -.10<CR>')
+			map_list.append('noremap <M-k> :ShownoterChangeSpeed .10<CR>')
+			map_list.append('noremap <M-J> :ShownoterChangeVolume 10<CR>')
+			map_list.append('noremap <M-K> :ShownoterChangeVolume 10<CR>')
+			
+			if not self.nvim.vars.get('shownoter_no_insert_mappings'):
+				map_list.append('noremap! <M-Space> <Esc>:ShownoterTogglePlay<CR>a')
+				map_list.append('noremap! <buffer> <M-p> <Esc>:ShownoterInsertTimestamp<CR>a')
+				map_list.append('noremap! <buffer> <M-CR> <Esc>:ShownoterSeekFromCurrentLine<CR>a')
+				map_list.append('noremap! <M-h> <Esc>:ShownoterSkipTime -5000<CR>a')
+				map_list.append('noremap! <M-H> <Esc>:ShownoterSkipTime -10000<CR>a')
+				map_list.append('noremap! <M-l> <Esc>:ShownoterSkipTime 5000<CR>a')
+				map_list.append('noremap! <M-L> <Esc>:ShownoterSkipTime 10000<CR>a')
+				map_list.append('noremap! <M-j> <Esc>:ShownoterChangeSpeed -.10<CR>a')
+				map_list.append('noremap! <M-k> <Esc>:ShownoterChangeSpeed .10<CR>a')
+				map_list.append('noremap! <M-J> :ShownoterChangeVolume 10<CR>a')
+				map_list.append('noremap! <M-K> :ShownoterChangeVolume 10<CR>a')
+			
+			for mapping in map_list:
+				self.nvim.command(mapping)
 
