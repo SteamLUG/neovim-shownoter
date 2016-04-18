@@ -186,7 +186,7 @@ class Shownoter(object):
 			map_list.append('noremap <M-L> :ShownoterSkipTime 10000<CR>')
 			map_list.append('noremap <M-j> :ShownoterChangeSpeed -.10<CR>')
 			map_list.append('noremap <M-k> :ShownoterChangeSpeed .10<CR>')
-			map_list.append('noremap <M-J> :ShownoterChangeVolume 10<CR>')
+			map_list.append('noremap <M-J> :ShownoterChangeVolume -10<CR>')
 			map_list.append('noremap <M-K> :ShownoterChangeVolume 10<CR>')
 			
 			if not self.nvim.vars.get('shownoter_no_insert_mappings'):
@@ -199,7 +199,7 @@ class Shownoter(object):
 				map_list.append('noremap! <M-L> <Esc>:ShownoterSkipTime 10000<CR>a')
 				map_list.append('noremap! <M-j> <Esc>:ShownoterChangeSpeed -.10<CR>a')
 				map_list.append('noremap! <M-k> <Esc>:ShownoterChangeSpeed .10<CR>a')
-				map_list.append('noremap! <M-J> :ShownoterChangeVolume 10<CR>a')
+				map_list.append('noremap! <M-J> :ShownoterChangeVolume -10<CR>a')
 				map_list.append('noremap! <M-K> :ShownoterChangeVolume 10<CR>a')
 			
 			for mapping in map_list:
