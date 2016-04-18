@@ -36,7 +36,7 @@ This plugin is intended specifically to help with editing the episode.txt files 
 | ShownoterChangeSpeed         | Shifts playback speed up/down by decimal, or resets | Up .10: Alt + k, Down .10: Alt + j |
 | ShownoterChangeVolume        | Increases/decreases volume by int, or resets        | Up 10: Alt + K, Down 10: Alt + J  |
 
-On entering the buffer of a file named episode.txt, ShownoterSetAudio is run and the key bindings are loaded. ShownoterInsertTimestamp and ShownoterSeekFromCurrentLine are unmapped on leaving the buffer. The audio file, time, speed, and volume are remembered are remembered per episode.txt, and will swap back and forth if editing multiple.
+On entering the buffer of a file named episode.txt, ShownoterSetAudio is run and the key bindings are loaded. ShownoterInsertTimestamp and ShownoterSeekFromCurrentLine are unmapped on leaving the buffer. The audio file, time, speed, and volume are remembered per episode.txt, and will swap back and forth if editing multiple.
 
 ### Variables
 
