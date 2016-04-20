@@ -118,6 +118,7 @@ class Shownoter(object):
 			c = 1
 		else:
 			c = c + self.p.get_rate()
+		c = round(c, 4)
 		self.p.set_rate(c)
 		self.show_echo('Playback rate set to {}'.format(c), message = False)
 	
