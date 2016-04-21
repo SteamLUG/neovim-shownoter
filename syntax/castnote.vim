@@ -19,7 +19,7 @@ syn match castnoteTimestamp /\m^\(\d\{2}:\?\)\{3}/
 syn match castnotePreviousCast /\m\[s\d\de\d\d]/
 syn region castnoteCodeBlock start=/`/ end=/`/
 syn match castnoteHTTP /\mhttps\?:\/\/\(\S\)\+\ze[, \n]/
-syn match castnoteTwitterHandle /\m@\(\S\)\+\ze[, \n]/
+syn match castnoteTwitterHandle /\m\(^\|\s\|(\)\zs@\(\S\)\+\ze[,) \n]/
 
 hi link castnoteMetaDataKey Define
 hi link castnoteMetaDataValue Comment
