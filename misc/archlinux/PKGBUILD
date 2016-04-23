@@ -1,0 +1,32 @@
+# Maintainer: HER0_01 <aconrad103 at gmail.com>
+
+pkgname=neovim-shownoter-git
+pkgver=39.5ff0c65
+pkgrel=1
+pkgdesc="Neovim plugin for editing SteamLUG Cast shownotes"
+arch=('any')
+url="https://github.com/SteamLUG/neovim-shownoter"
+license=('GPL3')
+depends=('neovim' 'python' 'python-neovim' 'python-vlc-git')
+makedepends=('git')
+provides=('neovim-shownoter')
+conflicts=('neovim-shownoter')
+install=neovim-shownoter-git.install
+source=("$pkgname::git://github.com/SteamLUG/neovim-shownoter.git")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  echo $(git rev-list --count master).$(git rev-parse --short master)
+}
+
+package() {
+  _nvimdir="$pkgdir/usr/share/nvim/runtime"
+  install -dm755 $_nvimdir
+  install -dm755 $_nvimdir/ftdetect
+  install -Dm644 $srcdir/$pkgname/ftdetect/castnote.vim $_nvimdir/ftdetect
+  install -dm755 $_nvimdir/rplugin/python3
+  install -Dm644 $srcdir/$pkgname/rplugin/python3/shownoter.py $_nvimdir/rplugin/python3
+  install -dm755 $_nvimdir/syntax
+  install -Dm644 $srcdir/$pkgname/syntax/castnote.vim $_nvimdir/syntax
+}

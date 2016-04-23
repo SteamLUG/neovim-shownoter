@@ -1,0 +1,9 @@
+post_install() {
+	echo "You must run the following command in nvim before using"
+	echo "the plugin and after each update:"
+	echo ":UpdateRemotePlugins"
+}
+
+post_upgrade() {
+	post_install $1
+}
