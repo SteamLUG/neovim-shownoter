@@ -74,9 +74,9 @@ class Shownoter(object):
 		title_lines.append('*Crowdfunding*')
 		title_lines.append('*Sign-off*')
 		title_lines_with_spaces = []
-		for l in range(8):
+		for l in title_lines:
 			title_lines_with_spaces.append("")
-			title_lines_with_spaces.append(title_lines[l])
+			title_lines_with_spaces.append(l)
 		self.nvim.current.buffer.set_line_slice(15, 31, True, True, title_lines_with_spaces)
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
