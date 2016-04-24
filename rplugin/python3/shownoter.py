@@ -1,5 +1,6 @@
 import neovim
 import vlc
+import datetime
 import fnmatch
 import os
 import re
@@ -23,6 +24,10 @@ class Shownoter(object):
 				pass  # Already loaded
 		else:
 			self.set_audio()
+		
+		if self.nvim.current.buffer.get_line_slice(0, -1, True, True):
+			self.fill_buffer()
+		
 		self.assign_keys()
 	
 	@neovim.autocmd('BufLeave', pattern='episode.txt', sync=True)
@@ -38,6 +43,41 @@ class Shownoter(object):
 				unmap_list.append('unmap! <buffer> <M-p>')
 				unmap_list.append('unmap! <buffer> <M-CR>')
 		self.assign_keys(unmap_list)
+	
+	@neovim.command('ShownoterFillBuffer', sync=True)
+	def fill_buffer(self):
+		meta_lines = []
+		meta_lines.append('RECORDED: ' + datetime.date.today().isoformat())
+		meta_lines.append('PUBLISHED:')
+		meta_lines.append('TITLE:')
+		meta_lines.append('SEASON:')
+		meta_lines.append('EPISODE:')
+		meta_lines.append('DURATION:')
+		meta_lines.append('FILENAME:')
+		meta_lines.append('DESCRIPTION:')
+		meta_lines.append('HOSTS:')
+		meta_lines.append('GUESTS:')
+		meta_lines.append('ADDITIONAL:')
+		meta_lines.append('RATING:')
+		meta_lines.append('YOUTUBE:')
+		meta_lines.append('NOTESCREATOR:')
+		meta_lines.append('EDITOR:')
+		self.nvim.current.buffer.set_line_slice(0, 14, True, True, meta_lines)
+		
+		title_lines = []
+		title_lines.append('*Introduction*')
+		title_lines.append('*Our Gaming*')
+		title_lines.append('*SteamLUG Community Stuff*')
+		title_lines.append('*Steam/Valve News*')
+		title_lines.append('*Tech News*')
+		title_lines.append('*General Gaming News*')
+		title_lines.append('*Crowdfunding*')
+		title_lines.append('*Sign-off*')
+		title_lines_with_spaces = []
+		for l in range(8):
+			title_lines_with_spaces.append("")
+			title_lines_with_spaces.append(title_lines[l])
+		self.nvim.current.buffer.set_line_slice(15, 31, True, True, title_lines_with_spaces)
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
