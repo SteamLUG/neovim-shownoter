@@ -25,7 +25,8 @@ class Shownoter(object):
 		else:
 			self.set_audio()
 		
-		if self.nvim.current.buffer.get_line_slice(0, -1, True, True):
+		buffer_contents = self.nvim.current.buffer.get_line_slice(0, -1, True, True)
+		if set(['']).intersection(buffer_contents) == {''}:
 			self.fill_buffer()
 		
 		self.assign_keys()
