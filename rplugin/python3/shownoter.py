@@ -82,19 +82,43 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
-		if filename is None:
-			buf_path = os.path.split(os.path.abspath(self.nvim.current.buffer.name))
-			for a_file in os.listdir(buf_path[0]):
-				if fnmatch.fnmatch(a_file, '*.ogg'):
-					filename = buf_path[0] + '/' + a_file
+		if isinstance(filename, list):
+			if filename == []:
+				filename = None
+			else:
+				filename = str(filename).strip("[']")
+		
+		if isinstance(filename, str):
+			filename = os.path.abspath(filename)
+		
+		elif filename is None:
+			folder = None
+			try:
+				folder = os.path.abspath(self.nvim.vars.get('shownoter_audio_folder'))
+			except AttributeError:
+				pass
+			buffer_path = os.path.split(os.path.abspath(self.nvim.current.buffer.name))
+			episode_guess = re.match('s\d\de\d\d', os.path.split(buffer_path[0])[1])
+			try:
+				episode_guess = episode_guess.group(0)
+			except AttributeError:
+				episode_guess = ''
+			match_guess_ogg = '*' + episode_guess + '*.ogg'
+			
+			if folder and os.path.isdir(folder):
+				for root, dirs, files in os.walk(folder):
+					for ogg_match in fnmatch.filter(files, match_guess_ogg):
+						filename = os.path.join(root, ogg_match)
+						
+			if filename is None:
+				for ogg_match in fnmatch.filter(os.listdir(buffer_path[0]), match_guess_ogg):
+					filename = os.path.join(buffer_path[0], ogg_match)
+			
 			if filename is None:
 				self.show_echo('No audio found', warning=True)
 				return
-		elif not isinstance(filename, str):
-			filename = str(filename).strip("[']")
 		
-		filename = os.path.abspath(filename)
-		if os.path.exists(filename):
+		if os.path.isfile(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
 			self.show_echo('Audio loaded: {}'.format(filename))
 		else:

@@ -46,3 +46,4 @@ Variables can be used to control certain settings.
 | ---------------------------- | --------------------------------------------- |
 | shownoter_no_mappings        | If true, no mappings are set                  |
 | shownoter_no_insert_mappings | If true, mappings do not apply in insert mode |
+| shownoter_audio_folder       | Path to folder containing Cast ogg files      |
