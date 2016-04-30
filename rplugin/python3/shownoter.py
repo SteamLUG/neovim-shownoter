@@ -144,10 +144,15 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterPauseAll')
 	def pause_all(self):
-		self.p.pause()
+		playing = vlc.State.Playing.value
+		if self.p.get_state().value is playing:
+			self.p.pause()
 		for player in self.buf_mem:
-			if isinstance(player, vlc.MediaPlayer):
-				player.pause()
+			try:
+				if player.get_state().value is playing:
+					player.pause()
+			except AttributeError:
+				pass
 	
 	@neovim.command('ShownoterInsertTimestamp', sync=True)
 	def insert_timestamp(self):
