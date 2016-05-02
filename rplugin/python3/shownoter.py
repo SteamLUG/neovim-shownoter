@@ -47,12 +47,14 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterFillBuffer', sync=True)
 	def fill_buffer(self):
+		episode_and_season = os.path.split(os.path.split(os.path.abspath(self.nvim.current.buffer.name))[0])[1].partition('e')
+		
 		meta_lines = []
 		meta_lines.append('RECORDED: ' + datetime.date.today().isoformat())
 		meta_lines.append('PUBLISHED:')
 		meta_lines.append('TITLE:')
-		meta_lines.append('SEASON:')
-		meta_lines.append('EPISODE:')
+		meta_lines.append('SEASON: ' + episode_and_season[0].strip('s'))
+		meta_lines.append('EPISODE: ' + episode_and_season[2])
 		meta_lines.append('DURATION:')
 		meta_lines.append('FILENAME:')
 		meta_lines.append('DESCRIPTION:')
