@@ -14,7 +14,7 @@ Github project page available at https://github.com/SteamLUG/neovim-shownoter
 
 ## Install
 
-Quick install on Linux: Place `shownoter.py` in `~/local/share/nvim/site/rplugin/python3`
+Quick install on Linux: Place `shownoter.py` in `~/.local/share/nvim/site/rplugin/python3`
 
 Using remote plugins requires updating the remote plugin manifest. This can be done with the neovim command `:UpdateRemotePlugins`, which must be run after install and after each update.
 
