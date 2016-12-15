@@ -37,7 +37,7 @@ This plugin is intended specifically to help with editing the episode.txt annota
 | ShownoterChangeVolume        | Increases/decreases volume by int, or resets        | Up 10: Alt + K, Down 10: Alt + J  |
 | ShownoterFillBuffer          | Fills buffer with metadata and headings. WARNING: Do not use on a non-empty buffer | None |
 
-On entering the buffer of a file named episode.txt, ShownoterSetAudio is run and the key bindings are loaded. If the buffer is empty, ShownoterFillBuffer is run. ShownoterInsertTimestamp and ShownoterSeekFromCurrentLine are unmapped on leaving the buffer. The audio file, time, speed, and volume are remembered per episode.txt, and will swap back and forth if editing multiple.
+On entering the buffer of a file named episode.txt, ShownoterSetAudio is run and the key bindings are loaded. If the buffer is empty, ShownoterFillBuffer is run. ShownoterInsertTimestamp and ShownoterSeekFromCurrentLine are unmapped on leaving the buffer. The audio file, time, speed, and volume are remembered per episode.txt buffer, for the duration of the session, and will swap back and forth if editing multiple.
 
 ### Variables
 
