@@ -80,7 +80,7 @@ class Shownoter(object):
 			title_lines_with_spaces.append("")
 			title_lines_with_spaces.append(l)
 		
-		self.nvim.current.buffer[:] = meta_lines + title_lines
+		self.nvim.current.buffer[:] = meta_lines + title_lines_with_spaces
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
