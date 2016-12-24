@@ -25,7 +25,7 @@ class Shownoter(object):
 		else:
 			self.set_audio()
 		
-		buffer_contents = self.nvim.current.buffer.get_line_slice(0, -1, True, True)
+		buffer_contents = self.nvim.current.buffer[:]
 		if buffer_contents == ['']:
 			self.fill_buffer()
 		
@@ -65,7 +65,6 @@ class Shownoter(object):
 		meta_lines.append('YOUTUBE:')
 		meta_lines.append('NOTESCREATOR:')
 		meta_lines.append('EDITOR:')
-		self.nvim.current.buffer.set_line_slice(0, 14, True, True, meta_lines)
 		
 		title_lines = []
 		title_lines.append('*Introduction*')
@@ -80,7 +79,8 @@ class Shownoter(object):
 		for l in title_lines:
 			title_lines_with_spaces.append("")
 			title_lines_with_spaces.append(l)
-		self.nvim.current.buffer.set_line_slice(15, 31, True, True, title_lines_with_spaces)
+		
+		self.nvim.current.buffer[:] = meta_lines + title_lines
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
