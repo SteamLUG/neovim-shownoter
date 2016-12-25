@@ -122,9 +122,9 @@ class Shownoter(object):
 		
 		if os.path.isfile(filename):
 			self.p = vlc.MediaPlayer('file://' + filename)
-			self.show_echo('Audio loaded: {}'.format(filename))
+			self.show_echo(f'Audio loaded: {filename}')
 		else:
-			self.show_echo('Audio file not found: {}'.format(filename), error=True)
+			self.show_echo(f'Audio file not found: {filename}', error=True)
 	
 	@neovim.command('ShownoterTogglePlay')
 	def toggle_play(self):
@@ -173,14 +173,14 @@ class Shownoter(object):
 	@neovim.command('ShownoterSeekTimestamp', nargs='?')
 	def seek_timestamp(self, timestamp='00:00:00'):
 		self.p.set_position(self.to_msec(timestamp)/self.p.get_length())
-		self.show_echo('Seeked to {}'.format(self.to_timestamp()))
+		self.show_echo(f'Seeked to {self.to_timestamp()}')
 	
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
 		if not isinstance(msecs, int):
 			msecs = int(str(msecs).strip("[']"))
 		self.p.set_position((msecs + self.p.get_time())/self.p.get_length())
-		self.show_echo('Skipped to {}'.format(self.to_timestamp()), message = False)
+		self.show_echo(f'Skipped to {to_timestamp()}'), message = False)
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
@@ -192,7 +192,7 @@ class Shownoter(object):
 			c = c + self.p.get_rate()
 		c = round(c, 4)
 		self.p.set_rate(c)
-		self.show_echo('Playback rate set to {}'.format(c), message = False)
+		self.show_echo(f'Playback rate set to {c}', message = False)
 	
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
@@ -203,7 +203,7 @@ class Shownoter(object):
 		else:
 			c = c + self.p.audio_get_volume()
 		self.p.audio_set_volume(c)
-		self.show_echo('Playback volume set to {}'.format(c), message = False)
+		self.show_echo(f'Playback volume set to {c}', message = False)
 	
 	@neovim.function('ShownotesToTimestamp')
 	def to_timestamp(self, msecs=None):
@@ -235,13 +235,13 @@ class Shownoter(object):
 	
 	def show_echo(self, text, message=True, warning=False, error=False):
 		if message:
-			command = 'echomsg "Shownoter: {}"'.format(text)
+			command = f'echomsg "Shownoter: {text}"'
 		else:
-			command = 'echo "Shownoter: {}"'.format(text)
+			command = f'echo "Shownoter: {text}"'
 		if warning:
-			command = 'echohl WarningMsg | {} | echohl None'.format(command)
+			command = f'echohl WarningMsg | {command} | echohl None'
 		elif error:
-			command = 'echohl ErrorMsg | {} | echohl None'.format(command)
+			command = f'echohl ErrorMsg | {command} | echohl None'
 		self.nvim.command(command)
 	
 	def assign_keys(self, map_list = []):
