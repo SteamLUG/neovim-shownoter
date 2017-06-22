@@ -1,8 +1,9 @@
 " Vim syntax file
 " Language: SteamLUG Cast shownotes file
-" Maintainer: SteamLUG (https://steamlug.org)
+"           https://github.com/SteamLUG/steamlugcast-shownotes
+" Maintainer: Andrew Conrad <aconrad103@gmail.com>
 " Filenames: episode.txt
-" Last Change: 2016-04-20
+" Last Change: 2017-06-21
 
 if exists("b:current_syntax")
   finish

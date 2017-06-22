@@ -1,7 +1,8 @@
 " Vim filetype plugin file
 " Language: SteamLUG Cast shownotes file
-" Maintainer: SteamLUG (https://steamlug.org)
-" Last Change: 2016-04-20
+"           https://github.com/SteamLUG/steamlugcast-shownotes
+" Maintainer: Andrew Conrad <aconrad103@gmail.com>
+" Last Change: 2017-06-21
 
 if exists("b:did_ftplugin")
   finish
