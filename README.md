@@ -6,14 +6,20 @@ Copyright © 2016 Andrew "HER0" Conrad
 
 Functionality improves on the [web-based](https://steamlug.org/transcriberer)
 editor, [Transcriberer](https://github.com/SteamLUG/transcriberer). Besides the
-audio playback controls, neovim-shownoter's enhanced feature set includes:
+standard audio playback controls, neovim-shownoter's enhanced feature set
+includes:
+
+* Syntax highlighting.
 
 * Always adding timestamps to the beginning of the line, instead of at the
 cursor position. If a timestamp is already present, it is replaced.
 
-* Seeking the audio to the timestamp on the current line.
+* A keybinding for seeking the audio to the timestamp on the current line.
 
 * Automatic loading of local audio files.
+
+* Work on locally stored shownotes, as opposed to copying and pasting text to
+and from a web browser.
 
 * Support for customizing keybindings (see available [commands](#commands)). You
 can even set the increments used for audio adjustments (skipping, changing
