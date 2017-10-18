@@ -36,7 +36,7 @@ and their usage on the [Cast web pages](https://steamlug.org/cast).
 
 ## Requirements
 
-* [Python 3.6](https://www.python.org)
+* [Python 3.6](https://www.python.org) or newer
 
 * [python-vlc](https://github.com/oaubert/python-vlc)
 
