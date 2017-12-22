@@ -1,6 +1,6 @@
 # [neovim-shownoter](https://github.com/SteamLUG/neovim-shownoter)
 
-Copyright © 2016 Andrew "HER0" Conrad
+Copyright © 2016, 2017 Andrew "HER0" Conrad
 
 **neovim-shownoter** is a Neovim plugin for editing SteamLUG Cast [shownotes](https://github.com/SteamLUG/steamlugcast-shownotes).
 
