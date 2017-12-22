@@ -195,7 +195,7 @@ class Shownoter(object):
 		if not isinstance(msecs, int):
 			msecs = int(str(msecs).strip("[']"))
 		self.p.set_position((msecs + self.p.get_time())/self.p.get_length())
-		self.show_echo(f'Skipped to {to_timestamp()}'), message = False)
+		self.show_echo(f'Skipped to {self.to_timestamp()}', message = False)
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
