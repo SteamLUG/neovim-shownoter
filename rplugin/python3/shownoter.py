@@ -99,16 +99,15 @@ class Shownoter(object):
 	
 	@neovim.command('ShownoterSetAudio', nargs='?', complete='file')
 	def set_audio(self, filename=None):
-		if isinstance(filename, list):
-			if filename == []:
-				filename = None
-			else:
-				filename = str(filename).strip("[']")
-		
 		if isinstance(filename, str):
 			filename = os.path.abspath(filename)
+		else:
+			try:
+				filename = filename[0]
+			except (IndexError, TypeError):
+				filename = None
 		
-		elif filename is None:
+		if filename is None:
 			folder = None
 			try:
 				folder = os.path.abspath(self.nvim.vars.get('shownoter_audio_folder'))
@@ -193,14 +192,14 @@ class Shownoter(object):
 	@neovim.command('ShownoterSkipTime', nargs='1')
 	def skip(self, msecs):
 		if not isinstance(msecs, int):
-			msecs = int(str(msecs).strip("[']"))
+			msecs = int(msecs[0])
 		self.p.set_position((msecs + self.p.get_time())/self.p.get_length())
 		self.show_echo(f'Skipped to {self.to_timestamp()}', message = False)
 	
 	@neovim.command('ShownoterChangeSpeed', nargs='?')
 	def speed(self, c=0):
 		if not isinstance(c, float):
-			c = float(str(c).strip("[']"))
+			c = float(c[0])
 		if c is 0:
 			c = 1
 		else:
@@ -212,7 +211,7 @@ class Shownoter(object):
 	@neovim.command('ShownoterChangeVolume', nargs='?')
 	def volume(self, c=0):
 		if not isinstance(c, int):
-			c = int(str(c).strip("[']"))
+			c = int(c[0])
 		if c is 0:
 			c = 1
 		else:
@@ -224,8 +223,8 @@ class Shownoter(object):
 	def to_timestamp(self, msecs=None):
 		if not isinstance(msecs, int):
 			try:
-				msecs = int(str(msecs).strip("[']"))
-			except:
+				msecs = int(msecs[0])
+			except (IndexError, TypeError):
 				msecs = None
 		if msecs is None:
 			msecs = self.p.get_time()
@@ -241,7 +240,7 @@ class Shownoter(object):
 	@neovim.function('ShownotesToMsec')
 	def to_msec(self, timestamp):
 		if not isinstance(timestamp, str):
-			timestamp = str(timestamp).strip("[']")
+			timestamp = str(timestamp[0])
 		hms = timestamp.split(':')
 		msecs = int(hms[0]) * 3600000
 		msecs = int(hms[1]) * 60000 + msecs
